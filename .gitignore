@@ -40,6 +40,9 @@ models/
 *~
 .DS_Store
 
+# Cursor/IDE working files
+TODO.md
+
 # Temporary files
 *.tmp
 *.temp
