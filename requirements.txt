@@ -1,0 +1,6 @@
+requests>=2.31.0
+pytest>=8.0.0
+pillow>=10.0.0
+numpy>=1.26.0
+sentence-transformers>=2.6.0
+qdrant-client>=1.11.1

@@ -1,0 +1,50 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Virtual Environment
+bin/
+lib/
+include/
+share/
+pyvenv.cfg
+.venv/
+venv/
+env/
+ENV/
+
+# Project-specific
+photo_analysis.sqlite
+sorted_photos/
+img/
+*.log
+processing.log
+
+# HuggingFace cache
+.cache/
+models/
+*.bin
+*.safetensors
+
+# Qdrant (if local storage)
+.qdrant/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+
+# OS
+Thumbs.db
+desktop.ini
