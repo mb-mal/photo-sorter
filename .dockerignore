@@ -1,0 +1,64 @@
+# Git
+.git
+.gitignore
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+
+# Virtual Environment
+bin/
+lib/
+include/
+share/
+pyvenv.cfg
+.venv/
+venv/
+env/
+ENV/
+
+# Data directories (mounted as volumes)
+img/
+sorted_photos/
+data/
+photo_analysis.sqlite
+
+# Logs
+*.log
+processing.log
+
+# Cache
+.cache/
+models/
+*.bin
+*.safetensors
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Docker
+Dockerfile
+.dockerignore
+docker-compose.yml
+
+# Documentation (optional - can be included)
+# README.md
+# OPERATIONS.md
+
+# Tests (optional - can be included)
+tests/
+
+# Cursor/IDE working files
+TODO.md
+

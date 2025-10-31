@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import json
 import logging
+import os
 import sqlite3
 from dataclasses import dataclass
 from datetime import datetime, timezone, timedelta
@@ -1269,6 +1270,9 @@ def main() -> None:
         level=logging.DEBUG if args.verbose else logging.INFO,
         format="%(asctime)s | %(levelname)s | %(message)s",
     )
+    # Support environment variable for Qdrant URL (useful for Docker)
+    qdrant_url = os.getenv("QDRANT_URL", "http://localhost:6333")
+    
     config = SorterConfig(
         source_dir=Path(args.source).resolve(),
         output_dir=Path(args.destination).resolve(),
@@ -1278,6 +1282,8 @@ def main() -> None:
         retry_limit=args.retry_limit,
         retry_backoff_seconds=args.retry_backoff,
     )
+    # Override Qdrant URL from environment
+    object.__setattr__(config, "qdrant_url", qdrant_url)
     sorter = PhotoSorter(
         config,
         dry_run=args.dry_run,

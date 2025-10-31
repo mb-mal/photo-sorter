@@ -1,0 +1,75 @@
+services:
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: photo-sorter-qdrant
+    ports:
+      - "6333:6333"  # REST API
+      - "6334:6334"  # gRPC
+    volumes:
+      - qdrant_storage:/qdrant/storage
+    environment:
+      - QDRANT__SERVICE__GRPC_PORT=6334
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:6333/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped
+    networks:
+      - photo-sorter-network
+
+  # Optional: Ollama service (uncomment if you want to run Ollama in Docker)
+  # Note: Ollama models are large (10-40GB), consider using local installation
+  # ollama:
+  #   image: ollama/ollama:latest
+  #   container_name: photo-sorter-ollama
+  #   ports:
+  #     - "11434:11434"
+  #   volumes:
+  #     - ollama_models:/root/.ollama
+  #   environment:
+  #     - OLLAMA_HOST=0.0.0.0
+  #   networks:
+  #     - photo-sorter-network
+  #   # Run: docker-compose exec ollama ollama pull gemma3:27b-it-qat
+
+  photosorter:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: photo-sorter-app
+    volumes:
+      - ./img:/app/img:ro  # Read-only source photos
+      - ./sorted_photos:/app/sorted_photos  # Output directory
+      - ./data:/app/data  # SQLite database and persistent data
+      - huggingface_cache:/root/.cache/huggingface  # Persist model cache
+    environment:
+      - QDRANT_URL=http://qdrant:6333
+      # Use host.docker.internal for macOS/Windows, or 'ollama' service name if using Docker Ollama
+      - OLLAMA_HOST=${OLLAMA_HOST:-host.docker.internal:11434}
+    depends_on:
+      qdrant:
+        condition: service_healthy
+      # Uncomment if using Ollama service:
+      # ollama:
+      #   condition: service_started
+    networks:
+      - photo-sorter-network
+    # Override default command if needed
+    # command: ["--limit", "10", "--verbose"]
+    restart: "no"  # Run once, not as daemon
+
+volumes:
+  qdrant_storage:
+    driver: local
+  huggingface_cache:
+    driver: local
+  # Uncomment if using Ollama service:
+  # ollama_models:
+  #   driver: local
+
+networks:
+  photo-sorter-network:
+    driver: bridge
+

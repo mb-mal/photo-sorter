@@ -20,6 +20,7 @@ ENV/
 photo_analysis.sqlite
 sorted_photos/
 img/
+data/
 *.log
 processing.log
 
